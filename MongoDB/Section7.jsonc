@@ -1,0 +1,92 @@
+//Methods,Filters and Operators
+use users
+db.mycollection.find({age:32})
+
+
+//This filter is used to find users above age 32
+db.mycollection.find({age:{$gt:32}})
+
+
+//find-finds all docs with the required field and gives a cursor
+db.mycollection.find({age:32})
+
+
+//findOne-finds the first doc with the required field
+db.mycollection.find({name:"Anirudh"})
+
+
+//Comparison Operators
+db.movies.find({runtime:{$gt:60}})
+db.movies.find({runtime:{$gte:60}})
+db.movies.find({runtime:{$lt:60}})
+db.movies.find({runtime:{$lte:60}})
+db.movies.find({runtime:{$eq:60}})
+db.movies.find({runtime:{$ne:60}})
+
+//Querying Embedded Docs
+db.employees.find({city.neighbourhood:"South Lake Union"})
+db.employees.find({Programming:"Java"})//Finds all employees who know Java
+db.employees.find({Programming:["Java"]})//Finds all employees who only know Java
+
+
+//$in and $nin
+db.movies.find({runtime:{$in:[30,42]}})//Movies in runtime 30 and 42
+db.movies.find({runtime:{$nin:[30,42]}})//Movies not in runtime 30 and 42
+
+
+//$or and $nor
+db.movies.find({$or:[{"rating.average":{$lt:5}},{"rating.average":{$gt:9}}]})
+db.movies.find({$or:[{"rating.average":{$lt:5}},{"rating.average":{$gt:9}}]})
+
+
+//$and
+db.movies.find({$and:[{"rating.average":{$lt:5}},{genre:"Drama"}]})
+db.movies.find({genre:"action",genre:"drama"}) //Is same as genre:drama as second overwrites first
+
+
+//$not
+db.movies.find({runtime:{$not:{$eq:60}}})
+
+
+//Element Operators
+db.users.find({age:{$exists:true,$gt:30}})
+db.users.find({phone:{$type:"number"}})
+
+
+//regex
+db.movies.find({summary:{$regex:/Itachi/}})
+
+//$expr
+db.sales.find({$expr:{$gt:[$volume,$target]}})
+
+//$size
+db.users.find({hobbies:{$size:3}})
+
+
+//$all
+db.movies.find({genre:["drama,action"]})//cares about order
+db.movies.find({genre:{$all:["drama,action"]}})//does not care about order
+
+
+//$elemMatch
+db.users.find({$and:[{hobbies:"sports"},{hobbies.frequency:{$gt:3}}]})
+db.users.find({hobbies:{$elemMatch:{title:"Sports",frequency:{$gt:3}}}})
+
+
+//$sorting
+db.movies.find().sort({rating.average:1})//ascending
+db.movies.find().sort({rating.average:1})//descending
+
+
+//skipping
+db.movies.find().skip(10).lmit(10)
+
+
+//Projection
+db.movies.find({},{name:1,year:1,city.street:1,_id:0})
+
+
+
+//$slice
+db.movies.find({rating.average:{$gt:9}},{genres:{$slice:2}})//shows movies with rating greater than 9 and each genre limits entry to 2
+db.movies.find({rating.average:{$gt:9}},{genres:{$slice:[1,2]}})//shows movies with rating greater than 9 and each genre skips first and shows next 2

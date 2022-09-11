@@ -1,0 +1,56 @@
+//Updating fields
+use shop
+db.users.updateOne({_id:objectId("adkfbskdhsdkvh")},{$set:{hobbies:[{title:"sports",frequency:4},{title:"cooking",frequency:4}]}})
+
+
+//Updating Multiple Fields
+db.users.updateOne({_id:objectId("adkfbskdhsdkvh")},{$set:{city:"seattle",age:29.5}})
+
+
+//Incrementing and decrementing values
+db.users.updateOne({name:"manuel"},{$inc:{age:2}})
+
+
+//min,max,mul
+db.users.updateOne({name:"manuel"},{$min:{age:2}})
+db.users.updateOne({name:"manuel"},{$max:{age:2}})
+db.users.updateOne({name:"manuel"},{$mul:{age:2}})
+
+
+//getting rid of fields
+db.users.updateMany({issporty:true},{$unset:{phone:""}})
+
+
+//Renaming fields
+db.users.updateMany({},{$rename:{age:"total age"}})
+
+
+//upsert
+db.users.updateOne({name:"Anirudh"},{$set:{age:26}},{upsert:true})
+
+
+//Updating matched array elements
+db.users.find({hobbies:{$elemMatch:{title:"Sports",frequency:{$gte:3}}}})
+db.users.find({hobbies:{$elemMatch:{title:"Sports",frequency:{$gte:3}}}},{$set:{"hobbies.$":{title:"sports",frequency:7}}})
+
+
+//Updating all array elements
+db.users.find({hobbies.frequency:{$gt:2}})
+db.users.updateMany({"hobbies.frequency":{$gt:2}},{$set:{"hobbies.$.goodfrequency":true}})
+db.users.updateMany({"hobbies.frequency":{$gt:2}},{$set:{"hobbies.$[].goodfrequency":+1}})
+
+
+//Finding and updating specific fields
+
+
+
+//Adding elements to array
+db.users.updateOne({name:"maria"},{$push:{hobbies:{title:"hiking",frequency:2}}})
+
+
+//Removing elements from array
+db.users.updateOne({name:"maria"},{$pull:{hobbies:{title:"hiking"}}})
+
+
+//$addToSet
+db.users.updateOne({name:"maria"},{$addToSet:{hobbies:{title:"hiking",frequenncy:2}}})
